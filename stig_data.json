@@ -1,0 +1,58 @@
+{
+  "RHEL-09-000001": {
+    "rhel_version": "9",
+    "severity": "high",
+    "title": "Password Complexity Requirements",
+    "description": "The RHEL 9 operating system must enforce a minimum password length of 15 characters to ensure strong authentication mechanisms.",
+    "check": "Verify the operating system enforces a minimum 15-character password length.\n\nCheck for the value of the minimum password length with the following command:\n\n# grep -i minlen /etc/security/pwquality.conf\n\nminlen = 15\n\nIf the value of \"minlen\" is set to less than 15, this is a finding.",
+    "fix": "Configure the operating system to enforce a minimum 15-character password length.\n\nAdd or modify the following line in the \"/etc/security/pwquality.conf\" file:\n\nminlen = 15"
+  },
+  "RHEL-09-000002": {
+    "rhel_version": "9",
+    "severity": "medium",
+    "title": "Firewall Configuration",
+    "description": "The RHEL 9 operating system must implement a host-based firewall to protect against unauthorized access and malicious attacks.",
+    "check": "Verify that firewalld is installed and running on the system.\n\n# systemctl status firewalld\n\nIf firewalld is not active and enabled, this is a finding.",
+    "fix": "Install and enable the firewalld service with the following commands:\n\n# dnf install -y firewalld\n# systemctl enable --now firewalld"
+  },
+  "RHEL-09-000003": {
+    "rhel_version": "9",
+    "severity": "medium",
+    "title": "Audit Logging Configuration",
+    "description": "The RHEL 9 operating system must be configured to generate audit records for successful account access events.",
+    "check": "Verify the RHEL 9 operating system generates audit records showing successful account access events.\n\n# grep -i logins /etc/audit/audit.rules\n\nIf the command does not return the following output, this is a finding.\n\n-w /var/log/lastlog -p wa -k logins",
+    "fix": "Configure the operating system to generate audit records for successful account access events by adding the following line to /etc/audit/rules.d/audit.rules:\n\n-w /var/log/lastlog -p wa -k logins\n\nRestart the audit daemon to apply the changes:\n\n# systemctl restart auditd"
+  },
+  "RHEL-09-000004": {
+    "rhel_version": "9",
+    "severity": "high",
+    "title": "SSH Security Configuration",
+    "description": "The RHEL 9 operating system must be configured to disable SSH root login to prevent unauthorized access to the system.",
+    "check": "Verify the SSH daemon does not permit root login.\n\n# grep -i permitrootlogin /etc/ssh/sshd_config\n\nPermitRootLogin no\n\nIf the \"PermitRootLogin\" keyword is set to \"yes\", this is a finding.",
+    "fix": "Configure SSH to prevent root login.\n\nEdit the /etc/ssh/sshd_config file to uncomment or add the line for PermitRootLogin and set it to \"no\":\n\nPermitRootLogin no\n\nRestart the SSH daemon:\n\n# systemctl restart sshd"
+  },
+  "RHEL-09-000005": {
+    "rhel_version": "9",
+    "severity": "medium",
+    "title": "User Account Management",
+    "description": "The RHEL 9 operating system must lock accounts after three unsuccessful logon attempts within a 15-minute time period.",
+    "check": "Verify the operating system locks an account after three unsuccessful logon attempts within a period of 15 minutes.\n\n# grep pam_faillock.so /etc/pam.d/password-auth\n\nIf the \"deny\" option is not set to 3 or less, this is a finding.",
+    "fix": "Configure the operating system to lock an account after three unsuccessful logon attempts within 15 minutes by adding the following line to /etc/pam.d/system-auth and /etc/pam.d/password-auth:\n\nauth required pam_faillock.so preauth silent deny=3 fail_interval=900 unlock_time=0"
+  },
+  "RHEL-08-000001": {
+    "rhel_version": "8",
+    "severity": "high",
+    "title": "Password Policy",
+    "description": "The RHEL 8 operating system must implement DoD-approved encryption to protect the confidentiality of remote access sessions.",
+    "check": "Verify the operating system implements DoD-approved encryption to protect the confidentiality of remote access sessions.\n\n# grep -i ciphers /etc/ssh/sshd_config\n\nCiphers aes256-ctr,aes192-ctr,aes128-ctr\n\nIf any ciphers other than those listed are allowed, this is a finding.",
+    "fix": "Configure the operating system to implement DoD-approved encryption by adding or modifying the following line in /etc/ssh/sshd_config:\n\nCiphers aes256-ctr,aes192-ctr,aes128-ctr\n\nRestart the SSH service:\n\n# systemctl restart sshd"
+  },
+  "RHEL-08-000002": {
+    "rhel_version": "8",
+    "severity": "medium",
+    "title": "File System Mounting",
+    "description": "The RHEL 8 operating system must prevent direct root logins.",
+    "check": "Verify the operating system prevents direct root logins.\n\n# grep -i securetty /etc/securetty\n\nIf the file exists and is not empty, this is a finding.",
+    "fix": "Configure the operating system to prevent direct root logins by removing the /etc/securetty file or ensuring it is empty:\n\n# echo > /etc/securetty\n\nor\n\n# rm /etc/securetty"
+  }
+}

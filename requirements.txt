@@ -1,0 +1,11 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+aiofiles==23.2.1
+pydantic==2.4.2
+numpy<2.0.0
+sentence-transformers==2.2.2
+faiss-cpu==1.7.4
+torch==2.0.1
+transformers==4.30.2
+huggingface_hub==0.16.4
